@@ -3,6 +3,10 @@ public class Main
 {
     public static int count_all_subsequence_with_sum_target(int index, int n, int arr[], int sum, int target){
     
+    	//can be done only if array contains +ve integers
+	if(sum > target)
+		return 0;
+	
         //if base condition satisfied return 1 
         if(index == n){
             if(sum == target){
