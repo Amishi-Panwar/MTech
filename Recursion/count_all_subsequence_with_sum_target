@@ -1,0 +1,28 @@
+import java.util.*;
+public class Main
+{
+    public static int count_all_subsequence_with_sum_target(int index, int n, int arr[], int sum, int target){
+    
+        //if base condition satisfied return 1 
+        if(index == n){
+            if(sum == target){
+                return 1;
+            }
+            
+        //else return 0    
+        return 0;
+        }
+        
+        sum += arr[index];
+        int left = count_all_subsequence_with_sum_target(index+1, n, arr, sum, target);
+        sum -= arr[index];
+        int right = count_all_subsequence_with_sum_target(index+1, n, arr, sum, target);
+        return left+right;
+        
+    }
+	public static void main(String[] args) {
+	    int arr[] = new int[]{1,2,1};
+	    int target = 2;
+	    System.out.println(count_all_subsequence_with_sum_target(0, 3, arr, 0, target));
+	}
+}
