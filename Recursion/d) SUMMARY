@@ -1,0 +1,3 @@
+PRINT ALL - parameter vise pass ds(arrayList)
+PRINT ONLY 1 - return true/false and avoid further recursion calls if you get true
+COUNT - base condition- return 1/return 0 and add all f()
