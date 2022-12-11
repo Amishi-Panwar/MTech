@@ -10,6 +10,8 @@ class Solution{
     ArrayList<Integer> subsetSums(ArrayList<Integer> arr, int N){
         ArrayList<Integer> result = new ArrayList<>();
         subsetSumsUtil(0, 0, arr, N, result);
+        //sort subset sums if required
+        Collections.sort(result);
         return result;
     }
 }
