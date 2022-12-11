@@ -22,6 +22,7 @@ class Solution {
         }
     }
     public List<List<Integer>> permuteUnique(int[] nums) {
+        //set used to remove duplicates
         Set<List<Integer>> result = new HashSet<>();
         Arrays.sort(nums);
         permuteUniqueUtil(0,nums,result);
