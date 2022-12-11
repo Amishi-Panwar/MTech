@@ -1,0 +1,33 @@
+class Solution {
+    public void swap(int i, int j, int nums[]){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    
+    //initially original nums array
+    public void permuteUtil(int index, int nums[], List<List<Integer>>result){
+        
+        if(index == nums.length){
+            List<Integer> ds = new ArrayList<>();
+            for(int i=0;i<nums.length;i++)
+                ds.add(nums[i]);
+            result.add(new ArrayList<>(ds));
+            return;
+        }
+        
+        //swap index with every element ahead of it in array
+        for(int i=index;i<nums.length;i++){
+            swap(i,index,nums);
+            permuteUtil(index+1,nums,result);
+            //swap back to get original array back and then loop forward to swap index with next element in array
+            swap(i,index,nums);
+        }
+    }
+    
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        permuteUtil(0,nums,result);
+        return result;
+    }
+}
