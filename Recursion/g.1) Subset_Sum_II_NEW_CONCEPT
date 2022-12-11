@@ -1,0 +1,28 @@
+class Solution {
+    public void subsetsWithDupUtil(int index, int[] nums, List<Integer>ds, List<List<Integer>>result){
+
+        //add ds everytime to get all subsets
+        result.add(new ArrayList<>(ds));
+
+        //run loop to get any subset of size index
+        for(int i=index; i<nums.length; i++){
+        
+        //to avoid duplicate subset of size = index
+            if(i>index && nums[i] == nums[i-1])
+                continue;
+            ds.add(nums[i]);
+            subsetsWithDupUtil(i+1, nums, ds, result);
+            ds.remove(ds.size()-1);
+        }
+    }
+    
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> result = new ArrayList();
+        List<Integer> ds = new ArrayList<>();
+        
+        Arrays.sort(nums);
+        
+        subsetsWithDupUtil(0, nums, ds, result);
+        return result;
+    }
+}
