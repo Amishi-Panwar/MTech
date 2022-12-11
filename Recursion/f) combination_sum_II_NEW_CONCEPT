@@ -3,7 +3,8 @@ class Solution {
 
         if(target == 0)
             result.add(new ArrayList<>(ds));
-            
+           
+        //sort array before to skip same elements in array to avoid duplicates
         //choosing at index position, which element of array can take place, if elements are duplicate, skip it and move to next to avoid duplicates
         for(int i=index;i<candidates.length;i++){
             if(i > index && candidates[i] == candidates[i-1])
