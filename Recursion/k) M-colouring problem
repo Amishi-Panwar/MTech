@@ -1,0 +1,39 @@
+class solve {
+    // Function to determine if graph can be coloured with at most M colours
+    // such
+    // that no two adjacent vertices of graph are coloured with same colour.
+    
+    public boolean isValid(int node, boolean graph[][], int map[], int colour, int m, int n){
+        for(int i=0;i<n;i++){
+            if(graph[node][i]==true){
+                if(map[i] == colour)
+                    return false;
+            }
+        }
+        return true;
+    }
+    public boolean graphColoringUtil(int node,boolean graph[][], int map[], int m, int n){
+
+        if(node == n)
+            return true;
+            
+        for(int col=1; col<=m; col++){
+            if(isValid(node,graph,map,col,m,n)){
+                map[node] = col;
+                if(graphColoringUtil(node+1,graph, map, m, n))
+                    return true;
+                else
+                    map[node] = 0;
+            }
+        }
+            
+        return false; 
+    }
+    public boolean graphColoring(boolean graph[][], int m, int n) {
+        int map[] = new int[n];
+        if(graphColoringUtil(0,graph,map, m, n))
+            return true;
+            
+        return false;
+    }
+}
