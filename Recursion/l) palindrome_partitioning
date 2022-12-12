@@ -1,0 +1,33 @@
+class Solution {
+    public boolean checkPalindrome(String s){
+        int n = s.length();
+        int i=0;
+        while(i<n/2){
+            if(s.charAt(i)!=s.charAt(n-i-1))
+                return false;
+            i++;
+        }
+        return true;
+    }
+    public void partitionUtil(int index, String s, List<List<String>> result, List<String> ds){
+        if(index == s.length()){
+            result.add(new ArrayList<>(ds));
+            return; 
+        }
+        for(int i=index;i<s.length();i++){
+            if(checkPalindrome(s.substring(index,i+1))){
+                ds.add(s.substring(index,i+1));
+                partitionUtil(i+1,s,result,ds);
+                ds.remove(ds.size()-1);
+            }
+        }
+        
+    }
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<>();
+        List<String> ds = new ArrayList<>();
+        int n = s.length();
+        partitionUtil(0,s,result,ds);
+        return result;
+    }
+}
