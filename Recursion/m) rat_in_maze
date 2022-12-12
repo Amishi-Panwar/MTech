@@ -1,0 +1,118 @@
+class Solution {
+    public static boolean isValid(int i, int j, int[][]m, int n, int[][]visited){
+        if(i>=0 && j>=0 && i<n && j<n && m[i][j]==1 && visited[i][j]==0)
+            return true;
+        return false;
+    }
+    
+    public static String construct(ArrayList<Character>ds){
+        String s = "";
+        for(int i=0;i<ds.size();i++)
+            s+=ds.get(i);
+        return s;
+    }
+    
+    public static void findPathUtil(int i, int j, int[][]m, int n, int[][]visited, ArrayList<Character> ds, ArrayList<String> result){
+        
+        if(i==n-1 && j==n-1){
+            result.add(construct(ds));
+            return;
+        }
+        
+        int row[] = new int[]{1,0,0,-1};
+        int col[] = new int[]{0,-1,1,0};
+        
+        String dir = "DLRU";
+        for(int k=0;k<4;k++){
+            if(isValid(i+row[k], j+col[k], m, n, visited)){
+                ds.add(dir.charAt(k));
+                visited[i][j] = 1;
+                findPathUtil(i+row[k],j+col[k],m,n,visited,ds,result);
+                ds.remove(ds.size()-1);
+                visited[i][j] = 0;
+            }
+        }
+    }
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Character> ds = new ArrayList<>();
+        int visited[][] = new int[n][n];
+        if(m[0][0]==0){
+            String str = "-1";
+            result.add(str);
+            return result;
+        }
+        // visited[0][0]=1;
+        findPathUtil(0,0,m,n, visited, ds, result);
+        return result;
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// m is the given matrix and n is the order of matrix
+class Solution {
+    public static boolean isValid(int i, int j, int[][]m, int n, int[][]visited){
+        if(i>=0 && j>=0 && i<n && j<n && m[i][j]==1 && visited[i][j]==0)
+            return true;
+        return false;
+    }
+    
+    public static String construct(ArrayList<Character>ds){
+        String s = "";
+        for(int i=0;i<ds.size();i++)
+            s+=ds.get(i);
+        return s;
+    }
+    
+    public static void findPathUtil(int i, int j, int[][]m, int n, int[][]visited, ArrayList<Character> ds, ArrayList<String> result){
+        
+        if(i==n-1 && j==n-1){
+            result.add(construct(ds));
+            return;
+        }
+        
+        if(isValid(i+1, j, m, n, visited)){
+            ds.add('D');
+            visited[i][j] = 1;
+            findPathUtil(i+1,j,m,n,visited,ds,result);
+            ds.remove(ds.size()-1);
+            visited[i][j] = 0;
+        }
+        if(isValid(i, j-1, m, n, visited)){
+            ds.add('L');
+            visited[i][j] = 1;
+            findPathUtil(i,j-1,m,n,visited,ds,result);
+            ds.remove(ds.size()-1);
+            visited[i][j] = 0;
+        }
+        if(isValid(i, j+1, m, n, visited)){
+            ds.add('R');
+            visited[i][j] = 1;
+            findPathUtil(i,j+1,m,n,visited,ds,result);
+            ds.remove(ds.size()-1);
+            visited[i][j] = 0;
+        }
+        if(isValid(i-1, j, m, n, visited)){
+            ds.add('U');
+            visited[i][j] = 1;
+            findPathUtil(i-1,j,m,n,visited,ds,result);
+            ds.remove(ds.size()-1);
+            visited[i][j] = 0;
+        }
+        
+    }
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Character> ds = new ArrayList<>();
+        int visited[][] = new int[n][n];
+        if(m[0][0]==0){
+            String str = "-1";
+            result.add(str);
+            return result;
+        }
+        visited[0][0]=1;
+        findPathUtil(0,0,m,n, visited, ds, result);
+        return result;
+    }
+}
