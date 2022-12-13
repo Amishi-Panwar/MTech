@@ -1,0 +1,22 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static final int MOD = 1000000007;
+	public static int countDistinctWayToClimbStair(long nStairs) {
+        
+        long prev2 = 1;
+        long prev = 1;
+        long curr;
+        for(long i=2 ; i<=nStairs ; i++){
+            curr = (prev2 + prev)%MOD;
+            prev2 = prev;
+            prev = curr;
+        }
+        return (int)prev;
+        
+//RECURSION
+// 		if(nStairs == 1 || nStairs == 0)
+//             return 1;
+//         return countDistinctWayToClimbStair(nStairs-1) + countDistinctWayToClimbStair(nStairs-2);
+	}
+}
