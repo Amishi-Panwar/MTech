@@ -1,0 +1,5 @@
+1) Try to represent the problem in terms of index.
+2) Do all possible stuffs on that index according to problem statement.
+3) If que says count all ways - sum of all stuffs
+   If que says find min - take min of all stuffs
+   
