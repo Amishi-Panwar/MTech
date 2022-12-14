@@ -16,8 +16,13 @@ class Solution {
 
         if(nums.length == 1)
             return nums[0];
+            
+        //find ans except 1st element
         int temp1[] = new int[nums.length-1];
+        
+        //find ans except last element as first and last elements can never be together
         int temp2[] = new int[nums.length-1];
+        
         for(int i=0;i<nums.length;i++){
             if(i!=nums.length-1)
                 temp1[i] = nums[i];
