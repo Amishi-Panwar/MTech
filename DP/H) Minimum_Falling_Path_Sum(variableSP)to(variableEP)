@@ -1,0 +1,96 @@
+//MEMOIZATION
+class Solution {
+    public int f(int i, int j, int[][] matrix, int[][] dp){
+       
+        if(j<0 || j>=matrix[0].length)
+            return Integer.MAX_VALUE;
+            
+        //BASE CASE 1st row
+        if(i==0)
+            return dp[i][j] = matrix[i][j];
+            
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+            
+        int lu = Integer.MAX_VALUE;
+        int su = Integer.MAX_VALUE;
+        int ru = Integer.MAX_VALUE;
+        if(j>0)
+            lu = f(i-1,j-1,matrix,dp);
+        if(j>=0)
+            su = f(i-1,j,matrix,dp);
+        if(j<matrix[0].length)
+            ru = f(i-1,j+1,matrix,dp);
+        return dp[i][j] = matrix[i][j]+ Math.min(Math.min(lu,su),ru);
+    }
+    public int minFallingPathSum(int[][] matrix) {
+        int dp[][] = new int[matrix.length][matrix[0].length];
+        for(int row[]: dp)
+            Arrays.fill(row,-1);
+        int min = Integer.MAX_VALUE;
+        
+        //min of all cells in end row
+        for(int j=0;j<matrix[0].length;j++)
+            min = Math.min(f(matrix.length-1,j,matrix,dp),min);
+        return min;
+    }
+}
+________________________________________________________________________________________________________________________________________________
+//TABULAIZATION
+
+public int minFallingPathSum(int[][] matrix) {
+        int dp[][] = new int[matrix.length][matrix[0].length];
+        
+        for(int j=0;j<matrix[0].length;j++)
+            dp[0][j] = matrix[0][j];
+
+        for(int i=1;i<matrix.length;i++){
+            for(int j=0;j<matrix[0].length;j++){
+                int lu = Integer.MAX_VALUE;
+                int su = Integer.MAX_VALUE;
+                int ru = Integer.MAX_VALUE;
+                if(j>0)
+                    lu = dp[i-1][j-1];
+                if(j>=0)
+                    su = dp[i-1][j];
+                if(j<matrix[0].length-1)
+                    ru = dp[i-1][j+1];
+                dp[i][j] = matrix[i][j]+ Math.min(Math.min(lu,su),ru);
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for(int j=0;j<matrix[0].length;j++)
+            min = Math.min(dp[matrix.length-1][j],min);
+        return min;
+    }
+   ____________________________________________________________________________________________________________________________________
+   //SPACE OPTIMIZATION
+   
+   public int minFallingPathSum(int[][] matrix) {
+        int prev[] = new int [matrix[0].length];
+        
+        for(int j=0;j<matrix[0].length;j++)
+            prev[j] = matrix[0][j];
+
+        for(int i=1;i<matrix.length;i++){
+            int curr[] =new int[matrix[0].length];
+            for(int j=0;j<matrix[0].length;j++){
+                int lu = Integer.MAX_VALUE;
+                int su = Integer.MAX_VALUE;
+                int ru = Integer.MAX_VALUE;
+                if(j>0)
+                    lu = prev[j-1];
+                if(j>=0)
+                    su = prev[j];
+                if(j<matrix[0].length-1)
+                    ru = prev[j+1];
+                curr[j] = matrix[i][j]+ Math.min(Math.min(lu,su),ru);
+            }
+            for(int k=0;k<matrix[0].length;k++)
+                prev[k] =curr[k];
+        }
+        int min = Integer.MAX_VALUE;
+        for(int j=0;j<matrix[0].length;j++)
+            min = Math.min(prev[j],min);
+        return min;
+     }
