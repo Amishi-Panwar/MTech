@@ -1,0 +1,112 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static int f(int i,int j1,int j2, int[][] grid, int[][][] dp){
+        if(j1<0 || j1>=grid[0].length || j2<0 || j2>=grid[0].length)
+            return -10000007;
+        if(i==grid.length-1){
+            if(j1==j2)
+                return grid[i][j1];
+            else
+                return grid[i][j1]+grid[i][j2];
+        }
+        if(dp[i][j1][j2]!=-1)
+            return dp[i][j1][j2];
+        int dir[] = new int[]{-1,0,1};
+        int max=Integer.MIN_VALUE;
+        //try all possible ways of alice and bob both(j1,j2)
+        for(int s = 0;s<3;s++){
+            for(int l=0;l<3;l++){
+                max=Math.max(f(i+1,j1+dir[s],j2+dir[l],grid,dp),max);
+            }
+        }
+        if(j1 == j2)
+            return dp[i][j1][j2]= grid[i][j1]+ max;
+        return dp[i][j1][j2]= grid[i][j1]+grid[i][j2]+ max;
+    }
+    
+	public static int maximumChocolates(int r, int c, int[][] grid) {
+		int dp[][][] = new int [r][c][c];
+        for(int i=0;i<r;i++){
+            for(int row[]: dp[i]){
+                Arrays.fill(row,-1);
+            }
+        }
+        return f(0,0,c-1,grid,dp);
+	}
+}
+_____________________________________________________________________________________________________________________________________________________
+//TABULIZATION
+
+public static int maximumChocolates(int r, int c, int[][] grid) {
+		int dp[][][] = new int [r][c][c];
+        
+        //BASE CASE
+        for(int j1=0;j1<c;j1++){
+            for(int j2=0;j2<c;j2++){
+                if(j1==j2)
+                    dp[r-1][j1][j2]=grid[r-1][j1];
+                else
+                    dp[r-1][j1][j2]=grid[r-1][j1]+grid[r-1][j2];
+            }
+        }
+        
+        int dir[] = new int[]{-1,0,1};
+        for(int i=r-2;i>=0;i--){
+            for(int j1=0;j1<c;j1++){
+                for(int j2=0;j2<c;j2++){
+                    int max=Integer.MIN_VALUE;
+                    for(int s = 0;s<3;s++){
+                        for(int l=0;l<3;l++){
+                            if(j1+dir[s]>=0 && j1+dir[s]<c && j2+dir[l]>=0 && j2+dir[l]<c)
+                            max=Math.max(dp[i+1][j1+dir[s]][j2+dir[l]],max);
+                        }
+                    }
+                    if(j1==j2)
+                        dp[i][j1][j2]= grid[i][j1]+max;
+                    else
+                        dp[i][j1][j2]= grid[i][j1]+grid[i][j2]+max;
+                }
+            }
+        }
+        return dp[0][0][c-1];
+	}
+  ___________________________________________________________________________________________________________________________________________
+  //SPACE OPTIMIZATION
+  
+  public static int maximumChocolates(int r, int c, int[][] grid) {
+		int prev[][] = new int[c][c];
+        int curr[][] = new int[c][c];
+        for(int j1=0;j1<c;j1++){
+            for(int j2=0;j2<c;j2++){
+                if(j1==j2)
+                    prev[j1][j2]=grid[r-1][j1];
+                else
+                    prev[j1][j2]=grid[r-1][j1]+grid[r-1][j2];
+            }
+        }
+        
+        int dir[] = new int[]{-1,0,1};
+        for(int i=r-2;i>=0;i--){
+            for(int j1=0;j1<c;j1++){
+                for(int j2=0;j2<c;j2++){
+                    int max=Integer.MIN_VALUE;
+                    for(int s = 0;s<3;s++){
+                        for(int l=0;l<3;l++){
+                            if(j1+dir[s]>=0 && j1+dir[s]<c && j2+dir[l]>=0 && j2+dir[l]<c)
+                            max=Math.max(prev[j1+dir[s]][j2+dir[l]],max);
+                        }
+                    }
+                    if(j1==j2)
+                        curr[j1][j2]= grid[i][j1]+max;
+                    else
+                        curr[j1][j2]= grid[i][j1]+grid[i][j2]+max;
+                }
+            }
+            for(int p1=0;p1<c;p1++){
+                for(int p2=0;p2<c;p2++)
+                    prev[p1][p2]=curr[p1][p2];
+            }
+        }
+        return prev[0][c-1];
+	}
