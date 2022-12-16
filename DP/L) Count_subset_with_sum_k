@@ -1,0 +1,26 @@
+//MEMOIZATION
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static int f(int index,int num[],int target,int dp[][]){
+        if(target==0)
+            return 1;
+        if(index==0)
+            return num[0]==target?1:0;
+        if(dp[index][target]!=-1)
+            return dp[index][target];
+        int notpick = f(index-1,num,target,dp);
+        int pick = 0;
+        if(num[index]<=target)
+            pick = f(index-1,num,target-num[index],dp);
+        return dp[index][target] = pick + notpick;
+    }
+    public static int findWays(int num[], int tar) {
+        int dp[][] = new int[num.length][tar+1];
+        for(int row[]: dp)
+            Arrays.fill(row,-1);
+        return f(num.length-1,num,tar,dp);
+    }
+}
+_______________________________________________________________________________________________________________________________________
+//
