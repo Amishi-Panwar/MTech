@@ -1,0 +1,40 @@
+//ONLY FOR NON_NEGATIVE INTEGERS
+//Space Optimization
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	public static int minSubsetSumDifference(int[] nums, int n) {
+		int k = 0;
+        for(int num : nums)
+            k+= num;
+        boolean prev[] = new boolean[k+1];
+        boolean curr[] = new boolean[k+1];
+        prev[0] = true;
+        curr[0] = true;
+        if(nums[0]<=k)
+            prev[nums[0]]=true;
+        
+        for(int index=1;index<nums.length;index++){
+            for(int target=1;target<=k;target++){
+                boolean nonpick = prev[target];
+                boolean pick =false;
+                if(nums[index]<=target)
+                    pick = prev[target-nums[index]];
+                curr[target] = pick || nonpick;
+            }
+            for(int l=0;l<k+1;l++)
+                prev[l]=curr[l];
+        }
+        
+        //check in last row of dp(covering all elements of array)...min abs diff among all possible subset sum
+        int totalSum = k;
+        int mindiff = Integer.MAX_VALUE;
+        for(int i=0;i<k+1;i++){
+            if(prev[i]==true)
+                mindiff = Math.min(mindiff, Math.abs(i-(totalSum-i)));
+        }
+        return mindiff;
+	}
+
+}
