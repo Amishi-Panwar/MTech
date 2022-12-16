@@ -1,3 +1,4 @@
+//2 Wrong ans
 //MEMOIZATION
 import java.util.* ;
 import java.io.*; 
@@ -23,4 +24,30 @@ public class Solution {
     }
 }
 _______________________________________________________________________________________________________________________________________
-//
+//TABULIZATION
+
+   public static int findWays(int arr[], int tar) {
+       
+        int prev[] = new int[tar+1];
+        int curr[] = new int[tar+1];
+        prev[0] = 1;
+        curr[0] = 1;
+        if(arr[0] <= tar)
+            prev[arr[0]] = 1;
+
+        for(int index=1;index<arr.length;index++){
+            for(int j=1;j<=tar;j++){
+                int notpick = prev[j];
+                int pick = 0;
+                if(j-arr[index]>=0)
+                    pick = prev[j-arr[index]];
+   
+                curr[j]=notpick + pick;
+            }
+            for(int l=0;l<=tar;l++)
+                prev[l]=curr[l];
+        }
+        return prev[tar];
+    
+    }
+}
