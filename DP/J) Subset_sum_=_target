@@ -1,0 +1,76 @@
+//MEMOIZATION
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static boolean f(int index,int n, int k, int arr[], int dp[][]){
+        if(k == 0)
+            return true;
+        if(index == 0)
+            return arr[0] == k;
+        if(dp[index][k]!=-1)
+            return dp[index][k]==0?false:true;
+        boolean notpick = f(index-1,n,k,arr,dp);
+        boolean pick =false;
+        if(k-arr[index]>=0)
+            pick = f(index-1,n,k-arr[index],arr,dp);
+        if(notpick || pick){
+            dp[index][k]=1;
+            return true;
+        }
+        dp[index][k]=0;
+        return false;
+    }
+    public static boolean subsetSumToK(int n, int k, int arr[]){
+        int dp[][] = new int[n][k+1];
+        for(int row[]: dp)
+            Arrays.fill(row,-1);
+        return f(n-1,n,k,arr,dp);
+    }
+}
+________________________________________________________________________________________________________________________________________________
+//TABULIZATION
+
+ public static boolean subsetSumToK(int n, int k, int arr[]){
+        boolean dp[][] = new boolean[n][k+1];
+        for(int i=0;i<n;i++)
+            dp[i][0] =true;
+        if(arr[0] <= k)
+            dp[0][arr[0]] = true;
+
+        for(int index=1;index<n;index++){
+            for(int j=1;j<=k;j++){
+                boolean notpick = dp[index-1][j];
+                boolean pick =false;
+                if(j-arr[index]>=0)
+                    pick = dp[index-1][j-arr[index]];
+   
+                dp[index][j]=notpick || pick;
+            }
+        }
+        return dp[n-1][k];
+    }
+____________________________________________________________________________________________________________________________________________________
+//SPACE OPTIMIZATION
+
+ public static boolean subsetSumToK(int n, int k, int arr[]){
+        boolean prev[] = new boolean[k+1];
+        boolean curr[] = new boolean[k+1];
+        prev[0] = true;
+        curr[0] = true;
+        if(arr[0] <= k)
+            prev[arr[0]] = true;
+
+        for(int index=1;index<n;index++){
+            for(int j=1;j<=k;j++){
+                boolean notpick = prev[j];
+                boolean pick =false;
+                if(j-arr[index]>=0)
+                    pick = prev[j-arr[index]];
+   
+                curr[j]=notpick || pick;
+            }
+            for(int l=0;l<=k;l++)
+                prev[l]=curr[l];
+        }
+        return prev[k];
+    }
