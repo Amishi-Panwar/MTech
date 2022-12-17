@@ -1,0 +1,43 @@
+//MEMOIZATION
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    static int f(int index,int w,int weight[],int profit[],int n, int dp[][]){
+        if(index==0){
+            return profit[index]*(w/weight[index]);
+        }
+        if(dp[index][w]!=-1)
+            return dp[index][w];
+        int nottaken = f(index-1,w,weight,profit,n,dp);
+        int taken = -(int)1e9;
+        if(weight[index]<=w)
+            taken = profit[index] + f(index,w-weight[index],weight,profit,n,dp);
+        return dp[index][w]=Math.max(taken, nottaken);
+    }
+    public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+        int dp[][] = new int[n][w+1];
+        for(int row[]: dp)
+            Arrays.fill(row,-1);
+        return f(n-1,w, weight, profit,n,dp);
+    }
+}
+__________________________________________________________________________________________________________________________________
+//TABULIZATION
+
+ public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+        int dp[][] = new int[n][w+1];
+        for(int target = 0; target<=w; target++)
+            dp[0][target] = (target/weight[0])*profit[0];
+        
+        for(int index=1;index<n;index++){
+            for(int target=0;target<=w;target++){
+                int nottaken = dp[index-1][target];
+                int taken = -(int)1e9;
+                if(weight[index]<=target)
+                    taken = profit[index] + dp[index][target-weight[index]];
+                dp[index][target]=Math.max(taken, nottaken);
+            }
+        }
+        return dp[n-1][w];
+    }
