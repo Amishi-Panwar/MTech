@@ -1,0 +1,36 @@
+//TABULATION
+public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+        int dp[][] = new int[n][w+1];
+        for(int target = 0; target<=w; target++)
+            dp[0][target] = (target/weight[0])*profit[0];
+        
+        for(int index=1;index<n;index++){
+            for(int target=0;target<=w;target++){
+                int nottaken = dp[index-1][target];
+                int taken = -(int)1e9;
+                if(weight[index]<=target)
+                    taken = profit[index] + dp[index][target-weight[index]];
+                dp[index][target]=Math.max(taken, nottaken);
+            }
+        }
+        return dp[n-1][w];
+    }
+   __________________________________________________________________________________________________________________
+   //SPACE OPTIMIZATION
+   
+    public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+        int dp[][] = new int[n][w+1];
+        for(int target = 0; target<=w; target++)
+            dp[0][target] = (target/weight[0])*profit[0];
+        
+        for(int index=1;index<n;index++){
+            for(int target=0;target<=w;target++){
+                int nottaken = dp[index-1][target];
+                int taken = -(int)1e9;
+                if(weight[index]<=target)
+                    taken = profit[index] + dp[index][target-weight[index]];
+                dp[index][target]=Math.max(taken, nottaken);
+            }
+        }
+        return dp[n-1][w];
+    }
