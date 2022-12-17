@@ -1,0 +1,66 @@
+//MEMOIZATION
+import java.util.* ;
+import java.io.*; 
+
+public class Solution{
+    static int f(int index,int maxweight,int weight[],int value[],int n, int dp[][]){
+        if(index==0){
+            if(weight[index]<=maxweight)
+                return value[index];
+            return 0;
+        }
+        if(dp[index][maxweight]!=-1)
+            return dp[index][maxweight];
+        int nottaken = f(index-1,maxweight,weight,value,n,dp);
+        int taken =Integer.MIN_VALUE;
+        if(weight[index]<=maxweight)
+            taken = value[index] + f(index-1,maxweight-weight[index],weight,value,n,dp);
+        return dp[index][maxweight]=Math.max(taken, nottaken);
+    }
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        int dp[][] = new int[n][maxWeight+1];
+        for(int row[]: dp)
+            Arrays.fill(row,-1);
+        return f(n-1,maxWeight, weight, value,n,dp);
+    }
+}
+____________________________________________________________________________________________________________________________________
+//TABULIZATION
+
+static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        int dp[][] = new int[n][maxWeight+1];
+        for(int i=weight[0];i<=maxWeight;i++)
+            dp[0][i] = value[0];
+        for(int index=1;index<n;index++){
+            for(int w=0;w<=maxWeight;w++){
+                int nottaken = dp[index-1][w];
+                int taken =Integer.MIN_VALUE;
+                if(weight[index]<=w)
+                    taken = value[index] + dp[index-1][w-weight[index]];
+                dp[index][w] = Math.max(taken,nottaken);
+            }
+        }
+        return dp[n-1][maxWeight];
+    }
+_________________________________________________________________________________________________________________________________________________
+//SPACE OPTIMIZATION
+
+static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        int prev[] = new int[maxWeight+1];
+        int curr[] = new int[maxWeight+1];
+        for(int i=weight[0];i<=maxWeight;i++)
+           prev[i] = value[0];
+        for(int index=1;index<n;index++){
+            for(int w=0;w<=maxWeight;w++){
+                int nottaken = prev[w];
+                int taken =Integer.MIN_VALUE;
+                if(weight[index]<=w)
+                    taken = value[index] + prev[w-weight[index]];
+                curr[w] = Math.max(taken,nottaken);
+            }
+            for(int k=0;k<=maxWeight;k++)
+                prev[k]=curr[k];
+        }
+        return prev[maxWeight];
+    }
+}
