@@ -1,0 +1,60 @@
+//MEMOIZATION
+class Solution {
+    public int f(int index1, int index2, String text1, String text2, int dp[][]){
+        if(index1<0 || index2<0)
+            return 0;
+        if(dp[index1][index2]!=-1)
+            return dp[index1][index2];
+        if(text1.charAt(index1) == text2.charAt(index2))
+            return 1 + f(index1-1, index2-1, text1, text2,dp);
+        return dp[index1][index2]= Math.max(f(index1, index2-1,text1,text2,dp), f(index1-1, index2,text1,text2,dp));
+    }
+    public int longestCommonSubsequence(String text1, String text2) {
+        int dp[][] = new int[text1.length()][text2.length()];
+        for(int row[] : dp)
+            Arrays.fill(row,-1);
+        return f(text1.length()-1, text2.length()-1,text1, text2, dp);
+    }
+}
+_____________________________________________________________________________________________________________________________________________________
+//TABULIZATION
+
+ public int longestCommonSubsequence(String text1, String text2) {
+        int dp[][] = new int[text1.length()+1][text2.length()+1];
+        // for(int row[] : dp)
+        //     Arrays.fill(row,-1);
+        for(int i=0;i<text1.length();i++)
+            dp[i][0] = 0;
+
+        for(int i=0;i<text2.length();i++)
+            dp[0][i] = 0;
+
+        for(int index1=1; index1<=text1.length();index1++){
+            for(int index2=1; index2<=text2.length(); index2++){
+                if(text1.charAt(index1-1) == text2.charAt(index2-1))
+                    dp[index1][index2] = 1 + dp[index1-1][index2-1];
+                else
+                    dp[index1][index2]= Math.max(dp[index1][index2-1],dp[index1-1][index2]);
+            }
+        }
+        return dp[text1.length()][text2.length()];
+    }
+  __________________________________________________________________________________________________________________________
+  //SPACE OPTIMIZATION
+  
+  public int longestCommonSubsequence(String text1, String text2) {
+        int prev[] = new int[text2.length()+1];
+        int curr[] = new int[text2.length()+1];
+        // prev[0] = 0;
+
+        for(int index1=1; index1<=text1.length();index1++){
+            for(int index2=1; index2<=text2.length(); index2++){
+                if(text1.charAt(index1-1) == text2.charAt(index2-1))
+                    curr[index2] = 1 + prev[index2-1];
+                else
+                    curr[index2]= Math.max(curr[index2-1],prev[index2]);
+            }
+            prev=(int[])(curr.clone());
+        }
+        return prev[text2.length()];
+    }
