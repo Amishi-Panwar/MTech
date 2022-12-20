@@ -71,3 +71,23 @@ public int numDistinct(String s, String t) {
         return prev[n];
     }
 }
+-----------------------------------------------------------------------------------
+//WORKING
+    public int numDistinct(String s, String t) {
+        int m = s.length();
+        int n = t.length();
+        int prev[] =  new int[n+1];
+        prev[0] = 1;
+        for(int j=1;j<=n;j++)
+            prev[j] = 0; 
+
+        for(int index1=1;index1<=m;index1++){
+            for(int index2=n; index2>=1; index2--){
+                if(s.charAt(index1-1) == t.charAt(index2-1))
+                    prev[index2] = prev[index2-1]+prev[index2];
+                else
+                    prev[index2] = prev[index2];
+            }
+        }
+        return prev[n];
+    }
