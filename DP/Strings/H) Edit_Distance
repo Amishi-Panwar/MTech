@@ -1,0 +1,79 @@
+//MEMOIZATION
+class Solution {
+    public int f(int index1, int index2, String word1, String word2, int dp[][]){
+        if(index1<0)
+            return index2+1;
+        if(index2<0)
+            return index1+1;
+        if(word1.charAt(index1) == word2.charAt(index2))
+            return dp[index1][index2] = f(index1-1, index2-1,word1,word2,dp);
+        if(dp[index1][index2]!=-1)
+            return dp[index1][index2];
+
+        int insert = f(index1, index2-1,word1,word2,dp);
+        int delete = f(index1-1, index2,word1,word2,dp);
+        int replace = f(index1-1, index2-1,word1,word2,dp);
+        return dp[index1][index2] = 1+Math.min(Math.min(insert, delete), replace);
+ 
+    }
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int dp[][] = new int [m+1][n+1];
+        for(int row[]: dp)
+            Arrays.fill(row,-1);
+        return f(m-1,n-1,word1, word2, dp);
+    }
+}
+____________________________________________________________________________________________________________________________________
+//TABULIZATION
+
+public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int dp[][] = new int [m+1][n+1];
+        for(int i=0;i<=m;i++)
+            dp[i][0] = i;
+        for(int j=0;j<=n;j++)
+            dp[0][j] = j;
+        dp[0][0] =0;
+        for(int index1=1; index1<=m;index1++){
+            for(int index2=1; index2<=n; index2++){
+                if(word1.charAt(index1-1) == word2.charAt(index2-1))
+                    dp[index1][index2] = dp[index1-1][index2-1];
+                else{
+                    int insert = curr[index2-1];
+                    int delete = prev[index2];
+                    int replace = prev[index2-1];
+                    dp[index1][index2] = 1+Math.min(Math.min(insert, delete), replace);
+                }
+            }
+        }
+        return dp[m][n];
+}
+_________________________________________________________________________________________________________________________________
+//SPACE OPTIMIZATION
+ public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int prev[] = new int [n+1];
+        int curr[] = new int [n+1]; 
+        for(int j=0;j<=n;j++)
+            prev[j] = j;
+
+        for(int index1=1; index1<=m;index1++){
+            curr[0] = index1;
+            for(int index2=1; index2<=n; index2++){
+                if(word1.charAt(index1-1) == word2.charAt(index2-1))
+                    curr[index2] = prev[index2-1];
+                else{
+                    int insert = curr[index2-1];
+                    int delete = prev[index2];
+                    int replace = prev[index2-1];
+                    curr[index2] = 1+Math.min(Math.min(insert, delete), replace);
+                }
+            }
+            prev = (int[])(curr.clone());
+        }
+        return prev[n];
+    }
