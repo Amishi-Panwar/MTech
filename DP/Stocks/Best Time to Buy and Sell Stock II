@@ -1,0 +1,45 @@
+    //MEMOIZATION
+    public int f(int index, int prices[], int buy){
+        if(index == prices.length)
+            return 0;
+        if(buy==1){
+            return Math.max(-prices[index] + f(index+1,prices,0), f(index+1,prices,1));
+        }
+        return Math.max(prices[index] + f(index+1,prices,1), f(index+1,prices,0));
+    }
+ _______________________________________________________________________________________________________________________
+//Tabulization
+
+public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int dp[][] = new int[n+1][2];
+        dp[n][1]= dp[n][1] = 0;
+        for(int index=n-1; index>=0; index--){
+            for(int buy=0;buy<=1;buy++){
+                if(buy==1)
+                    dp[index][buy] = Math.max(-prices[index] + dp[index+1][0], dp[index+1][1]);
+                else
+                    dp[index][buy] = Math.max(prices[index] + dp[index+1][1], dp[index+1][0]);
+            }
+        }
+        return dp[0][1];
+    }
+  _______________________________________________________________________________________________________________________________
+  //SPACE OPTIMIZATION
+  
+  public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int prev[] = new int[2];
+        int curr[] = new int[2];
+        prev[1] = 0;
+        for(int index=n-1; index>=0; index--){
+            for(int buy=0;buy<=1;buy++){
+                if(buy==1)
+                    curr[buy] = Math.max(-prices[index] + prev[0],prev[1]);
+                else
+                    curr[buy] = Math.max(prices[index] + prev[1], prev[0]);
+            }
+            prev = curr;
+        }
+        return prev[1];
+    }
