@@ -20,4 +20,46 @@ class Solution {
 }
 ________________________________________________________________________________________________________
 //Tabulization
-??
+
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        int dp[][] = new int[n+1][n+1];
+        for(int i=0;i<n;i++)
+            dp[n][i]=0;
+        for(int index=n-1;index>=0;index--){
+            for(int prev=index-1;prev>=-1;prev--){
+                int pick = 0;
+                int nonpick = 0;
+                if(prev == -1 || nums[index]>nums[prev])
+                    pick = 1+dp[index+1][index+1];
+                nonpick = dp[index+1][prev+1];
+                dp[index][prev+1] = Math.max(pick,nonpick);
+            }
+        }
+        return dp[0][0];
+    }
+}
+_______________________________________________________________________________________________________________________________
+//SPACE OPTIMIZATION
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        int next[] = new int[n+1];
+        int curr[] = new int[n+1];
+        // for(int i=0;i<n;i++)
+        //     next[i]=0;
+        for(int index=n-1;index>=0;index--){
+            for(int prev=index-1;prev>=-1;prev--){
+                int pick = 0;
+                int nonpick = 0;
+                if(prev == -1 || nums[index]>nums[prev])
+                    pick = 1+next[index+1];
+                nonpick = next[prev+1];
+                curr[prev+1] = Math.max(pick,nonpick);
+            }
+            next = curr;
+        }
+        return next[0];
+    }
+}
