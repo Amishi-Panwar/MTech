@@ -1,0 +1,41 @@
+//sort it to deal subset as longest subsequence
+class sortByLength implements Comparator<String>{
+    public int compare(String a, String b){
+        return a.length()-b.length();
+    }
+}
+class Solution {
+    public boolean compare(String s, String t){
+        if(s.length()+1!=t.length())
+            return false;
+        int i=0,j=0;
+        while(i!=s.length() && j!=t.length()){
+            if(s.charAt(i)==t.charAt(j)){
+                i++;
+                j++;
+            }else
+                j++;
+            if(i==s.length() && (j==t.length()-1 || j==t.length()) )
+                return true;
+        }
+        return false;
+    }
+    public int longestStrChain(String[] words) {
+        int n =words.length;
+        int dp[] =  new int[n];
+        int hash[] =  new int[n];
+        Arrays.sort(words, new sortByLength());
+        Arrays.fill(dp,1);
+        for(int index=0;index<n;index++){
+            for(int prev=0;prev<index;prev++){
+                if(compare(words[prev],words[index]) && dp[prev]+1>dp[index])
+                    dp[index] = dp[prev]+1;
+            }
+        }
+        int max=0;
+        for(int index=0;index<n;index++)
+            if(max<dp[index])
+                max= dp[index];
+        return max;
+    }
+}
