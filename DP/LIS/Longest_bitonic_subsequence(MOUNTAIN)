@@ -1,0 +1,39 @@
+
+class Solution
+{
+    public void reverse(int nums[]){
+        int i=0;
+        while(i<=nums.length/2-1){
+            int temp = nums[i];
+            nums[i] = nums[nums.length-i-1];
+            nums[nums.length-i-1] = temp;
+            i++;
+        }
+    }
+    public void LIS(int nums[], int dp[]){
+        int n = nums.length;
+        Arrays.fill(dp,1);
+        for(int index=0;index<n;index++){
+            for(int prev=0;prev<index;prev++){
+                if(nums[prev]<nums[index] && dp[prev]+1>dp[index])
+                    dp[index] = dp[prev]+1;
+            }
+        }
+    } 
+    public int LongestBitonicSequence(int[] nums)
+    {
+        int n =nums.length;
+        int dp[] = new int[n];
+        int dp2[] = new int[n];
+        LIS(nums,dp);
+        reverse(nums);
+        LIS(nums,dp2);
+        int max=1;
+        for(int i=0;i<n;i++){
+            if(dp[i]+dp2[n-1-i]-1>max)
+                max=dp[i]+dp2[n-1-i]-1;
+        }
+        return max;
+        
+    }
+}
