@@ -1,0 +1,58 @@
+class Solution {
+    public int[] leftSmallerElement(int[] nums1) {
+        Stack<Integer> s =new Stack();
+        int n=nums1.length;
+        int a[]=new int[n];
+        for(int i=0;i<n;i++){
+            while(s.isEmpty()!=true && nums1[s.peek()]>=nums1[i])
+                s.pop();
+            if(s.isEmpty()==true){
+                a[i]=0;
+            }
+            else{
+                a[i]=s.peek()+1;
+            }
+            s.push(i);
+        }
+        return a;
+    }
+    
+    public int[] rightSmallerElement(int[] nums1) {
+        Stack<Integer> s =new Stack();
+        int n=nums1.length;
+        int a[]=new int[n];
+        for(int i=n-1;i>=0;i--){
+            while(s.isEmpty()!=true && nums1[s.peek()]>=nums1[i])
+                s.pop();
+            if(s.isEmpty()==true){
+                a[i]=n-1;
+            }
+            else{
+                a[i]=s.peek()-1;
+            }
+            s.push(i);
+        }
+        return a;
+    }
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        int leftSmall[] = new int[n];
+        int rightSmall[] = new int[n];
+        rightSmall = rightSmallerElement(heights);
+        leftSmall = leftSmallerElement(heights);
+        int max=0;
+        // for(int i=0;i<n;i++){
+        //     System.out.print(rightSmall[i]+" ");
+        // }
+        // System.out.println();
+        // for(int i=0;i<n;i++){
+        //     System.out.print(leftSmall[i]+" ");
+        // }
+        for(int i=0;i<n;i++){
+            int area = heights[i] *Math.abs((rightSmall[i]-leftSmall[i]+1));
+            if(area>max)
+                max=area;
+        }
+        return max;
+    }
+}
