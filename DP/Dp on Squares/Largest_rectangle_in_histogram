@@ -56,3 +56,28 @@ class Solution {
         return max;
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//ONE PASS
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> s = new Stack();
+        int n = heights.length;
+        int maxArea = 0;
+        for(int i=0;i<=n;i++){
+            while(s.isEmpty()==false && (i==n || heights[s.peek()]>=heights[i])){
+                int height = heights[s.peek()];
+                s.pop();
+                int width = 0;
+                if(s.empty()==true)
+                    width=i;
+                else
+                    width = i-s.peek()-1;
+                maxArea= Math.max(maxArea,width*height);
+            }
+            s.push(i);    
+        }
+        return maxArea;
+    }
+}
