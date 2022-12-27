@@ -1,0 +1,48 @@
+class Solution {
+    public int f(int i, int k, int arr[], int dp[]){
+        int n = arr.length;
+        if(i==n)
+            return 0;
+        if(dp[i]!=-1)
+            return dp[i];
+        int sum=0;
+        int maxSum = Integer.MIN_VALUE;
+        int len = 0;
+        int maxInt = Integer.MIN_VALUE;
+        for(int index=i;index<i+k && index<n;index++){
+            len++;
+            maxInt = Math.max(maxInt, arr[index]);
+            sum = len*maxInt + f(index+1,k,arr,dp);
+            maxSum = Math.max(maxSum,sum);
+        }
+        return dp[i] = maxSum;
+    }
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int n = arr.length;
+        int dp[] = new int[n];
+        Arrays.fill(dp,-1);
+        return f(0,k,arr,dp);
+    }
+}
+___________________________________________________________________________________________________________
+
+class Solution {
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int n = arr.length;
+        int dp[] = new int[n+1];
+        dp[n]=0;
+        for(int i=n-1;i>=0;i--){
+            int sum=0;
+            int maxSum = Integer.MIN_VALUE;
+            int len = 0;
+            int maxInt = Integer.MIN_VALUE;
+            for(int index=i;index<i+k && index<n;index++){
+                len++;
+                maxInt = Math.max(maxInt, arr[index]);
+                sum = len*maxInt + dp[index+1];
+                maxSum = Math.max(maxSum,sum);
+            }
+            dp[i]= maxSum; 
+        }
+        return dp[0];
+    }
