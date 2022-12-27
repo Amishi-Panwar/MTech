@@ -1,0 +1,65 @@
+//inside whereever using dp check if it is calculated cance or not otherwise -1 will be added
+public class Solution {
+    public int f(int i, int j, int flag, String A, int dp[][][]){
+        int mod = 1003;
+        if(i>j)
+            return 0;
+        if(dp[i][j][flag]!=-1)
+            return dp[i][j][flag];
+        if(i==j){
+            if(flag==1)
+                return A.charAt(i)=='T'?1:0;
+            else
+                return A.charAt(i)=='F'?1:0;
+        }
+        int count=0;
+        for(int index=i+1;index<=j-1;index=index+2){
+            
+            if(dp[i][index-1][1]==-1)
+                dp[i][index-1][1]=f(i,index-1,1,A,dp);
+            if(dp[i][index-1][0]==-1)
+                dp[i][index-1][0]=f(i,index-1,0,A,dp);
+            if(dp[index+1][j][1]==-1)
+                dp[index+1][j][1]=f(index+1,j,1,A,dp);
+            if(dp[index+1][j][0]==-1)
+                dp[index+1][j][0]=f(index+1,j,0,A,dp);
+                
+            int lt = dp[i][index-1][1]%mod;
+            int lf = dp[i][index-1][0]%mod;
+            int rt = dp[index+1][j][1]%mod;
+            int rf = dp[index+1][j][0]%mod;
+            
+            if(A.charAt(index)=='|'){
+                if(flag==1){
+                    count += (lt*rt + lt*rf + lf*rt)%mod;
+                }else{
+                    count += (lf*rf)%mod;
+                }
+            }else if(A.charAt(index)=='&'){
+                if(flag==1){
+                    count += (lt*rt)%mod;
+                }else{
+                    count += ((lt*rf)%mod + (rt*lf)%mod + (lf*rf)%mod)%mod;
+                }
+            }else{
+                if(flag==1){
+                    count += (lt*rf)%mod + (rt*lf)%mod;
+                }else{
+                    count += ((lt*rt)%mod + (lf*rf)%mod)%mod;
+                }
+            }
+        }
+        return dp[i][j][flag]=count%mod;
+    }
+    public int cnttrue(String A) {
+        int n = A.length();
+        int dp[][][] = new int[n][n][2];
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                dp[i][j][0] = -1;
+                dp[i][j][1] = -1;
+            }
+        }
+        return f(0,n-1,1,A,dp);
+    }
+}
