@@ -3,3 +3,11 @@
 3) If que says count all ways - sum of all stuffs
    If que says find min - take min of all stuffs
    
+ ---------------------------------------------------------------------------------------------------------------------------
+ PARTITION DP
+ 
+ 1. Start with entire block/array -(always represent them by f(i,j) where i is the start point and j is the end point)
+ 2. Try all partitions. (Run a loop)
+ 3. return best possible 2 partitions.
+ 
+ 
