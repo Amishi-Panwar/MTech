@@ -1,0 +1,38 @@
+//Check whether adj list or matrix is given otherwise convert it into list
+
+class Solution {
+    static void dfs(int index, ArrayList<ArrayList<Integer>> adj, int V, int visited[]){
+        visited[index]=1;
+        for(Integer it: adj.get(index))
+            if(visited[it]==0){
+                dfs(it, adj, V, visited);
+            }
+    }
+    
+    static int numProvinces(ArrayList<ArrayList<Integer>> adj, int V) {
+        
+        ArrayList<ArrayList<Integer>> a = new ArrayList<>();
+        for(int i=0;i<V;i++)
+            a.add(new ArrayList<Integer>());
+        
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                if(adj.get(i).get(j)==1){
+                    a.get(i).add(j);
+                    a.get(j).add(i);
+                }
+            }
+        }
+        
+        int visited[] = new int[V];
+        int count=0;
+        for(int i=0;i<V;i++){
+            if(visited[i]==0){
+                count++;
+                dfs(i, a, V, visited);
+            }
+        }
+        return count;
+    }
+};
+____________________________________________________________________________________________
