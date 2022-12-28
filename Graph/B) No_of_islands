@@ -1,0 +1,34 @@
+class Solution {
+
+    public boolean isValid(int row, int col, int m, int n, char grid[][], int visited[][]){
+        if(row>=0 && row<m && col>=0 && col<n && grid[row][col]=='1' && visited[row][col]==0)
+            return true;
+        return false;
+    }
+    public void dfs(int row, int col, int m, int n, char grid[][], int visited[][]){
+        visited[row][col]=1;
+        int dirR[] = new int[]{0,-1,0,1};
+        int dirC[] = new int[]{-1,0,1,0};
+
+        for(int i=0;i<4;i++){
+            if(isValid(row+dirR[i], col+dirC[i], m, n, grid, visited)){
+                dfs(row+dirR[i], col+dirC[i], m, n, grid, visited);
+            }
+        }
+    }
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int visited[][] = new int[m][n];
+        int count=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(visited[i][j]==0 && grid[i][j]=='1'){
+                    count++;
+                    dfs(i,j,m,n,grid,visited);
+                }
+            }
+        }
+        return count;
+    }
+}
