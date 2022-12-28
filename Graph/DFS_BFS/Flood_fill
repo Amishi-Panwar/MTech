@@ -1,0 +1,28 @@
+class Solution {
+
+    public boolean isValid(int row, int col, int m, int n, int image[][], int visited[][], int flag){
+        if(row>=0 && row<m && col>=0 && col<n && image[row][col]==flag && visited[row][col]==0)
+            return true;
+        return false;
+    }
+    public void dfs(int flag, int row, int col, int color, int[][] image, int visited[][]){
+        visited[row][col] =1;
+        image[row][col] = color;
+        int dirR[] = new int[]{0,-1,0,1};
+        int dirC[] = new int[]{-1,0,1,0};
+
+        for(int i=0;i<4;i++){
+            if(isValid(row+dirR[i], col+dirC[i], image.length, image[0].length, image, visited, flag)){
+                dfs(flag, row+dirR[i], col+dirC[i], color, image, visited);
+            }
+        }
+
+    }
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int m = image.length;
+        int n = image[0].length;
+        int visited[][] = new int[m][n];
+        dfs(image[sr][sc],sr,sc,color,image,visited);
+        return image;
+    }
+}
