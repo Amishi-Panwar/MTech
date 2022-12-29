@@ -1,0 +1,51 @@
+
+class Solution {
+    public int[] getOrder(int[][] tasks){
+
+        //sort on processing time then on index in increasing order
+        //store enqueue then processing then index time in array of pq
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>((a,b)->(a[1]!=b[1]? (a[1]-b[1]):(a[2]-b[2])));
+        
+        //first store original indexes of tasks then sort 
+        int sortedTasks[][] = new int[tasks.length][3];
+        for(int i=0;i<tasks.length;i++){
+            sortedTasks[i][0]=tasks[i][0];
+            sortedTasks[i][1]=tasks[i][1];
+            sortedTasks[i][2]=i;
+        }
+        //sort tasks based on enqueue time
+        Arrays.sort(sortedTasks, (a,b)-> Integer.compare(a[0],b[0]));
+
+        //to store ans
+        int ans[] = new int[tasks.length];
+        //to track index for ans array
+        int order = 0;
+
+        int currtime=0;
+        
+        //to track indices of sortedTasks array  in while loop
+        int taskIndex=0;
+
+        while(!pq.isEmpty() || taskIndex<tasks.length){
+
+    //if pq is empty directly jump to next time enqueue time instead of increasing time by 1 unit and wait
+            if(pq.isEmpty() && currtime < sortedTasks[taskIndex][0]){
+                currtime = sortedTasks[taskIndex][0];
+            }
+
+            //add all tasks whose enqueue time is <= to currtime
+            while(taskIndex<tasks.length && currtime>=sortedTasks[taskIndex][0]){
+                pq.add(sortedTasks[taskIndex]);
+                taskIndex++;
+            }
+
+            int procctime = pq.peek()[1];
+            int index = pq.peek()[2];
+            //do the task
+            currtime += procctime;
+            ans[order++]=index;
+            pq.remove();
+        }
+        return ans;
+    }
+}
