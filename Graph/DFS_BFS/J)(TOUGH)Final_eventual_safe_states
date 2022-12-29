@@ -1,0 +1,42 @@
+//visited- to check if nodes are already visited or not so that we wont call dfs on that nodes
+//pathvis- to deject cycle- if node is a part of path you visiting, and its already a visited then its a cycle
+//check- to mark safe nodes(which never reached a cycle and reached dfs end(terminal))
+
+class Solution {
+    
+    boolean dfs(int node, int V, List<List<Integer>> adj, int visited[], int pathvis[], int check[]){
+        visited[node]=1;
+        pathvis[node]=1;
+        for(Integer next: adj.get(node)){
+            if(visited[next]==0){
+                if(dfs(next,V,adj,visited,pathvis,check)==true){
+                    check[next]=0;
+                    return true;
+                }
+            }else if(visited[next]==1 && pathvis[next]==1){
+                check[next]=0;
+                return true;
+            }
+        }
+        check[node]=1;
+        pathvis[node]=0;
+        return false;
+    }
+    
+    List<Integer> eventualSafeNodes(int V, List<List<Integer>> adj) {
+        int visited[] = new int[V];
+        int pathvis[] = new int[V];
+        int check[] = new int[V];
+        for(int i=0;i<V;i++){
+            if(visited[i]==0){
+                dfs(i,V,adj,visited,pathvis,check);
+            }
+        }
+        List<Integer> safenodes =new ArrayList<>();
+        for(int i=0;i<V;i++){
+            if(check[i]==1)
+                safenodes.add(i);
+        }
+        return safenodes;
+    }
+}
