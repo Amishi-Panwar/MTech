@@ -1,0 +1,38 @@
+//set doesnt compare Pair class so convert it into string for comparison 
+
+class Solution {
+    
+    void dfs(int r,int c,int br, int bc, int m, int n, int grid[][], int visited[][], ArrayList<String>ds){
+        String s = "";
+        s = s+(br-r)+(bc-c);
+        ds.add(s);
+        int dR[] = new int[]{0,-1,0,1};
+        int dC[] = new int[]{-1,0,1,0};
+        visited[r][c]=1;
+        for(int i=0;i<4;i++){
+            int nr = r+dR[i];
+            int nc = c+dC[i];
+            if(nr>=0 && nr<m && nc>=0 && nc<n && grid[nr][nc]==1 && visited[nr][nc]==0){
+                dfs(nr,nc,br,bc,m,n,grid,visited,ds);
+            }
+        }
+    }
+
+    int countDistinctIslands(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int visited[][] = new int[m][n];
+        Set<ArrayList<String>>set = new HashSet<>();
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                ArrayList<String> ds = new ArrayList<>();
+                if(grid[i][j]==1 && visited[i][j]==0){
+                    dfs(i,j,i,j,m,n,grid,visited,ds);
+                    set.add(ds);
+                }
+            }
+        }
+
+        return set.size();
+    }
+}
