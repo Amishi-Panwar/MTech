@@ -1,0 +1,72 @@
+class Pair{
+    int row;
+    int col;
+    int time;
+    public Pair(int row, int col, int time){
+        this.row=row;
+        this.col=col;
+        this.time=time;
+    }
+}
+class Solution {
+
+    public boolean isValid(int row, int col, int m, int n, int grid[][], int visited[][]){
+        if(row>=0 && row<m && col>=0 && col<n && grid[row][col]==1 && visited[row][col]==0){
+            return true;
+        }
+        return false;
+    }
+
+    public int[] bfs(int m, int n, Queue<Pair>q, int grid[][], int visited[][]){
+        int max = 0;
+        int rotten = 0;
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int row = p.row;
+            int col = p.col;
+            int time = p.time;
+            max = Math.max(max,time);
+            int dirR[] = new int[]{0,-1,0,1};
+            int dirC[] = new int[]{-1,0,1,0};
+            for(int i=0;i<4;i++){
+                int nRow = row+dirR[i];
+                int nCol = col+dirC[i];
+                if(isValid(nRow, nCol, m, n, grid, visited)){
+                    rotten++;
+                    visited[nRow][nCol] = 1;
+                    q.add(new Pair(nRow,nCol,time+1));
+                }
+            }
+        }
+        int a[] = new int[2];
+        a[0]=max;
+        a[1]=rotten;
+        return a;
+    }
+
+    public int orangesRotting(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int visited[][] = new int[m][n];
+        Queue<Pair> q = new LinkedList<>();
+        int rotten= 0 ;
+        int countFresh = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==2){
+                    visited[i][j]=1;
+                    q.add(new Pair(i,j,0));
+                }
+                if(grid[i][j]==1)
+                    countFresh++;
+            }
+        }
+        int ans[] = new int[2];
+        ans =  bfs(m,n,q,grid,visited);
+
+        if(ans[1]==countFresh)
+            return ans[0];
+
+        return -1;
+    }
+}
