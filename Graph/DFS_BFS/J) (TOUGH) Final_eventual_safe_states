@@ -1,3 +1,5 @@
+//Nodes which are not part of a cycle always reach terminal hence its a safe node
+
 //visited- to check if nodes are already visited or not so that we wont call dfs on that nodes
 //pathvis- to deject cycle- if node is a part of path you visiting, and its already a visited then its a cycle
 //check- to mark safe nodes(which never reached a cycle and reached dfs end(terminal))
