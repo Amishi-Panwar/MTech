@@ -1,0 +1,49 @@
+class Pair{
+    int r;
+    int c;
+    int step;
+    public Pair(int r, int c, int step){
+        this.r=r;
+        this.c=c;
+        this.step=step;
+    }
+}
+class Solution {
+    public void bfs(Queue<Pair> q, int m, int n, int mat[][], int visited[][], int dist[][]){
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int r = p.r;
+            int c = p.c;
+            int step = p.step;
+            dist[r][c]=step;
+            int dR[] = new int[]{-1,0,1,0};
+            int dC[] = new int[]{0,1,0,-1};
+            for(int i=0;i<4;i++){
+                int nr = r+dR[i];
+                int nc= c+dC[i];
+                if(nr>=0 && nr<m && nc>=0 && nc<n && visited[nr][nc]==0){
+                    visited[nr][nc]=1;
+                    q.add(new Pair(nr,nc,step+1));
+                }
+            }
+        }
+    }
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int visited[][] = new int[m][n];
+        int dist[][] = new int[m][n];
+        Queue<Pair>q = new LinkedList<>();
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(mat[i][j]==0){
+                    visited[i][j]=1;
+                    q.add(new Pair(i,j,0));
+                }else
+                    visited[i][j]=0;
+            }
+        }
+        bfs(q,m,n,mat,visited,dist);
+        return dist;
+    }
+}
