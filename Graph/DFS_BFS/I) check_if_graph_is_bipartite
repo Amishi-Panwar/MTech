@@ -1,0 +1,73 @@
+//color nodes with 2 colors and check if any adjacent node is colored same
+//BFS
+class Solution {
+    public boolean bfs(int node, int m, int n, int graph[][], int color[]){
+        Queue<Integer> q =new LinkedList<>();
+        color[node]=1;
+        q.add(node);
+        while(!q.isEmpty()){
+            int prev= q.poll();
+            for(int j=0;j<graph[prev].length;j++){
+                int next = graph[prev][j];
+                if(color[next]==-1){
+                    if(color[prev]==1){
+                        color[next]=0;
+                    }else{
+                        color[next]=1;
+                    }
+                    q.add(next);
+                }else if(color[next]==color[prev])
+                    return false;
+            }
+        }
+        return true;
+    }
+    public boolean isBipartite(int[][] graph) {
+        int m =graph.length;
+        int n = graph[0].length;
+        int color[] = new int[m];
+        Arrays.fill(color,-1);
+        for(int i=0;i<m;i++){
+            if(color[i]==-1){
+                if(bfs(i,m,n,graph,color)==false)
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+__________________________________________________________________________________________________________________________
+//DFS
+
+class Solution {
+    public boolean dfs(int node, int m, int n, int graph[][], int color[], int red){
+        color[node]=red;
+        for(int j=0;j<graph[node].length;j++){
+            int next = graph[node][j];
+            if(color[next]==-1){
+                if(red==1){
+                    if(dfs(next,m,n,graph,color,0)==false)
+                        return false;
+                }else{
+                    if(dfs(next,m,n,graph,color,1)==false)
+                        return false;
+                }
+            }else if(color[next]==color[node])
+                return false;
+        }
+        return true;
+    }
+    public boolean isBipartite(int[][] graph) {
+        int m =graph.length;
+        int n = graph[0].length;
+        int color[] = new int[m];
+        Arrays.fill(color,-1);
+        for(int i=0;i<m;i++){
+            if(color[i]==-1){
+                if(dfs(i,m,n,graph,color,1)==false)
+                    return false;
+            }
+        }
+        return true;
+    }
+}
