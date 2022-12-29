@@ -1,0 +1,46 @@
+//TAKE CARE OF CHAR, I was coparing 0(zero) but it was O(capital o)
+class Solution {
+    public void dfs(int r, int c, int m, int n, char board[][], int visited[][]){
+        int dirR[] = new int[]{0,-1,0,1};
+        int dirC[] = new int[]{-1,0,1,0};
+        visited[r][c]=1;
+        for(int i=0;i<4;i++){
+            int nr = r+dirR[i];
+            int nc = c+dirC[i];
+            if(nr>=0 && nr<m && nc>=0 && nc<n && board[nr][nc]=='O' && visited[nr][nc]==0){
+                dfs(nr,nc,m,n,board,visited);
+            }
+        }
+    }
+    public void solve(char[][] board) {
+        int m = board.length;
+        int n = board[0].length;
+        int visited[][] = new int[m][n];
+
+        for(int i=0;i<m;i++){
+            if(board[i][0]=='O' && visited[i][0]==0){
+                    dfs(i,0,m,n,board,visited);
+            }
+            if(board[i][n-1]=='O' && visited[i][n-1]==0){
+                    dfs(i,n-1,m,n,board,visited);
+            }
+        }
+
+        for(int j=0;j<n;j++){
+            if(board[0][j]=='O' && visited[0][j]==0){
+                    dfs(0,j,m,n,board,visited);
+            }
+            if(board[m-1][j]=='O' && visited[m-1][j]==0){
+                dfs(m-1,j,m,n,board,visited);
+            }
+        }
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j]=='O' && visited[i][j]==0){
+                    board[i][j]='X';
+                }
+            }
+        }
+    }
+}
