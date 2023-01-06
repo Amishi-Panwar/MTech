@@ -1,4 +1,4 @@
-
+//compare i and i+1 words in dict to find out why ith is smaller in dict and make edge from that character of ith to i+1th
 class Solution
 {
     public String topoSort(ArrayList<ArrayList<Integer>> adj, int K){
