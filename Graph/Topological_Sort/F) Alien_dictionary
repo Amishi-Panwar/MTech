@@ -1,3 +1,5 @@
+//NOTE - If there is cyclic dependency, dict is not possible and if(abcd appears before abc, then dict not possible becoz smaller string of same characters
+//always comes before larger string)
 //compare i and i+1 words in dict to find out why ith is smaller in dict and make edge from that character of ith to i+1th
 class Solution
 {
