@@ -1,0 +1,50 @@
+class Node{
+    int r;
+    int c;
+    int w;
+    Node(int _r, int _c, int _w){
+        r = _r;
+        c = _c;
+        w = _w;
+    }
+}
+class Solution {
+    public int minimumEffortPath(int[][] heights){
+        int n = heights.length;
+        int m = heights[0].length;
+        PriorityQueue<Node> pq =  new PriorityQueue<>((Node a, Node b)-> a.w-b.w);
+        int dist[][] = new int[n][m];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                dist[i][j]=(int)(1e9);
+            }
+        }
+        pq.add(new Node(0,0,0));
+        dist[0][0]=0;
+        while(!pq.isEmpty()){
+            Node p = pq.poll();
+            int r = p.r;
+            int c = p.c;
+            int w = p.w;
+            if(r == n-1 && c == m-1)
+                return w;
+            int dr[] = new int[]{-1,0,1,0};
+            int dc[] = new int[]{0,1,0,-1};
+            for(int i=0;i<4;i++){
+                int nr = dr[i]+r;
+                int nc = dc[i]+c;
+                if(nr>=0 && nr<n && nc>=0 && nc<m){
+                    int diff = Math.abs(heights[r][c]-heights[nr][nc]);
+                    if(w>diff)
+                        diff = w;
+                    if(dist[nr][nc]>diff){
+                        dist[nr][nc]=diff;
+                        pq.add(new Node(nr,nc,diff));
+                    }
+                    
+                }
+            }
+        }
+        return -1;
+    }
+}
