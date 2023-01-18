@@ -1,0 +1,38 @@
+//check case if end can never be reached
+
+// User function Template for Java
+class Pair{
+    int node;
+    int steps;
+    Pair(int _node, int _steps){
+        node=_node;
+        steps=_steps;
+    }
+}
+class Solution {
+    int minimumMultiplications(int[] arr, int start, int end) {
+        Queue<Pair> q = new LinkedList();
+        q.add(new Pair(start,0));
+        int minSteps[] = new int[100000];
+        for(int i=0;i<100000;i++)
+            minSteps[i]=(int)(1e9);
+        minSteps[start]=0;
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            if(p.node>100000)
+                return -1;
+            for(int i=0;i<arr.length;i++){
+                int newNum = (p.node * arr[i])%100000;
+                if(newNum==end)
+                    return p.steps+1;
+                if(minSteps[newNum]>p.steps+1){
+                    minSteps[newNum]=p.steps+1;
+                    q.add(new Pair(newNum, p.steps+1));
+                }
+            }
+        }
+        if(minSteps[end]==(int)(1e9))
+            return -1;
+        return minSteps[end];
+    }
+}
