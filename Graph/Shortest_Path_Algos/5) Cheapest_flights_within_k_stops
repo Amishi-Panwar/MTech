@@ -1,0 +1,53 @@
+//Cant use priority queue on edge weights as it might stop after k stops and unable to explore path which has more weight but less stop and 
+//atleast reach destination 
+//Priority Queue will be applied on stops.
+//NOTE- No need to use pq as stops will automaticaly increse by 1 step and added later in queue
+class Pair{
+    int node;
+    int dist;
+    int stops;
+    Pair(int node, int dist, int stops){
+        this.node = node;
+        this.dist = dist;
+        this.stops = stops;
+    }
+}
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        int m = flights.length;
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<m;i++){
+            adj.get(flights[i][0]).add(new Pair(flights[i][1], flights[i][2], 0));
+        }
+
+        Queue<Pair> pq = new LinkedList();
+        int cost[] = new int[n];
+        for(int i=0;i<n;i++)
+            cost[i]=(int)(1e9);
+        pq.add(new Pair(src,0,0));
+        cost[src]=0;
+        while(!pq.isEmpty()){
+            Pair p = pq.poll();
+            int node = p.node;
+            int dist = p.dist;
+            int stops = p.stops;
+            if(stops>k)
+                continue;
+            for(int i=0;i<adj.get(node).size();i++){
+                int next = adj.get(node).get(i).node;
+                int w = adj.get(node).get(i).dist;
+                if(cost[next]>w+dist){
+                    cost[next]=w+dist;
+                    pq.add(new Pair(next,cost[next],stops+1));
+                }
+            }
+        }
+
+        if(cost[dst]==(int)(1e9))
+            return -1;
+        return cost[dst];
+    }
+}
