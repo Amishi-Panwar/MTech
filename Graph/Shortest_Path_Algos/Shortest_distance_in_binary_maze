@@ -1,0 +1,54 @@
+class Node{
+    int r;
+    int c;
+    int w;
+    Node(int _r, int _c, int _w){
+        r=_r;
+        c=_c;
+        w=_w;
+    }
+}
+class Solution {
+    // public void bfs(int src, int dest, int visited[][], int grid[][]){
+
+    // }
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int n = grid.length;
+        int dist[][] = new int[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                dist[i][j]=(int)(1e9);
+            }
+        }
+        PriorityQueue<Node> pq = new PriorityQueue<>((Node a, Node b)-> a.w-b.w);
+        // Queue<Node> pq = new LinkedList<>();
+        pq.add(new Node(0,0,1));
+        if(n==1 && grid[0][0]==0)
+            return 1;
+        if(grid[0][0]!=0)
+            return -1;
+        dist[0][0]=1;
+        while(!pq.isEmpty()){
+            Node p = pq.poll();
+            int r = p.r;
+            int c = p.c;
+            int w = p.w;
+            System.out.print(r+" "+c+" "+w);
+            int dr[] = new int[]{-1,-1,-1,0,0,1,1,1};
+            int dc[] = new int[]{-1,0,1,-1,1,-1,0,1};
+            // int dr[] = new int[]{1,1,0,1,0,-1,-1,-1};
+            // int dc[] = new int[]{1,0,1,-1,-1,1,0,1};
+            for(int i=0;i<8;i++){
+                int nr = r+dr[i];
+                int nc = c+dc[i];
+                if(nr>=0 && nr<n && nc>=0 && nc<n && grid[nr][nc]==0 && dist[nr][nc]>w+1){
+                    pq.add(new Node(nr,nc,w+1));
+                    dist[nr][nc]=w+1;
+                    if(nr == n-1 && nc == n-1)
+                        return w+1;
+                }
+            }   
+        }
+        return -1;
+    }
+}
