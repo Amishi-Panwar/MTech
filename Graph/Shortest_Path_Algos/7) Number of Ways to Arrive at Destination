@@ -1,0 +1,45 @@
+//NOTE - Undirected graph, add edges both ways
+class Pair{
+    int node;
+    int weight;
+    Pair(int _node, int _weight){
+        node = _node;
+        weight = _weight;
+    }
+}
+class Solution {
+    public int countPaths(int n, int[][] roads) {
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for(int i=0;i<n;i++)
+            adj.add(new ArrayList());
+        for(int i=0;i<roads.length;i++){
+            adj.get(roads[i][0]).add(new Pair(roads[i][1],roads[i][2]));
+            adj.get(roads[i][1]).add(new Pair(roads[i][0],roads[i][2]));
+        }
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)-> a.weight-b.weight);
+        int dist[] = new int[n];
+        int mod = (int)(1e9+7);
+        Arrays.fill(dist,(int)(1e10));
+        int ways[] = new int[n];
+        pq.add(new Pair(0,0));
+        ways[0]=1;
+        while(!pq.isEmpty()){
+            Pair p = pq.poll();
+            int node = p.node;
+            int weight = p.weight;
+            for(Pair it : adj.get(node)){
+                if(weight+it.weight<dist[it.node]){
+                    dist[it.node]=weight+it.weight;
+                    ways[it.node]=ways[node];
+                    pq.add(new Pair(it.node, it.weight+weight));
+                }else if(weight+it.weight==dist[it.node]){
+                    ways[it.node]=(ways[it.node]+ways[node])%mod;
+                    
+                }
+            }
+        }
+        for(int i=0;i<n;i++)
+            System.out.print(ways[i]+" ");
+        return ways[n-1]%mod;
+    }
+}
