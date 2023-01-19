@@ -1,0 +1,23 @@
+class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+        int n = nums.length;
+        int prefixSum[] = new int[n];
+        int sum=0;
+        for(int i=0;i<n;i++){
+            sum=sum+nums[i];
+            prefixSum[i]=(sum%k+k)%k;
+        }
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int count=0;
+        map.put(0,1);
+        for(int i=0; i<n; i++){
+            if(!map.containsKey(prefixSum[i]))
+                map.put(prefixSum[i],1);
+            else{
+                count+=map.get(prefixSum[i]);
+                map.put(prefixSum[i],map.get(prefixSum[i])+1);
+            }
+        }
+        return count;
+    }
+}
