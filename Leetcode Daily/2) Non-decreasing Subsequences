@@ -1,0 +1,22 @@
+class Solution {
+    public void f(int index, int nums[], ArrayList<Integer> ds, Set<List<Integer>> ans){
+        if(index == nums.length){
+            if(ds.size()>=2){
+            ans.add(new ArrayList(ds));
+            }
+            return;
+        }
+        if(ds.isEmpty()|| ds.get(ds.size()-1)<=nums[index]){
+            ds.add(nums[index]);
+            f(index+1,nums,ds,ans);
+            ds.remove(ds.size()-1);
+        }
+        f(index+1,nums,ds,ans);
+    }
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        ArrayList<Integer> ds = new ArrayList<>();
+        Set<List<Integer>> ans = new HashSet<>();
+        f(0,nums,ds,ans);
+        return new ArrayList(ans);
+    }
+}
