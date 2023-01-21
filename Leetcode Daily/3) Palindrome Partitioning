@@ -1,0 +1,45 @@
+class Solution {
+    public boolean isValid(String s, int i, int j, int k){
+        if((i>1 && s.charAt(0)=='0')|| (j>1 && s.charAt(i)=='0') || (k>1 && s.charAt(i+j)=='0')||((s.length()-(i+j+k))>1 && s.charAt(i+j+k)=='0'))
+            return false;
+        int a = Integer.parseInt(s.substring(0,i));
+        int b = Integer.parseInt(s.substring(i,i+j));
+        int c = Integer.parseInt(s.substring(i+j,i+j+k));
+        int d = Integer.parseInt(s.substring(i+j+k,s.length()));
+        if(a<=255 && b<=255 && c<=255 && d<=255){
+            return true;
+        }
+        System.out.println(i);
+        return false;
+    }
+
+    public String makeStr(String s, int i, int j, int k){
+        String str = "";
+        str+=s.substring(0,i);
+        str+=".";
+        str+=s.substring(i,i+j);
+        str+=".";
+        str+=s.substring(i+j,i+j+k);
+        str+=".";
+        str+=s.substring(i+j+k,s.length());
+        return str;
+    }
+
+    public List<String> restoreIpAddresses(String s) {
+        List<String> ans = new ArrayList<>();
+        for(int i=1;i<=3;i++){
+            for(int j=1;j<=3;j++){
+                for(int k=1;k<=3;k++){
+                    if(s.length()-(i+j+k)>3)
+                        continue;
+                    if(i<=s.length() && i+j<=s.length() && i+j+k<s.length()){
+                        if(isValid(s,i,j,k)){
+                            ans.add(makeStr(s,i,j,k));
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
