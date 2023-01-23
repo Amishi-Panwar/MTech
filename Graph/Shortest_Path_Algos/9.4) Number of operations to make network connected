@@ -1,0 +1,60 @@
+class DisjointSet{
+    int parent[];
+    int rank[];
+    DisjointSet(int V){
+        parent = new int[V];
+        rank = new int[V]; 
+        for(int i=0;i<V;i++){
+            parent[i]=i;
+            rank[i]=1;
+        }
+    }
+
+    int findParent(int X){
+        if(X==parent[X])
+            return X;
+        return parent[X]=findParent(parent[X]);
+    }
+
+    void unionByRank(int u, int v){
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        if(ulp_u == ulp_v){
+            return;
+        }else if(rank[ulp_u] < rank[ulp_v]){
+            parent[ulp_u]=ulp_v;
+        }else if(rank[ulp_u] > rank[ulp_v]){
+            parent[ulp_v] = ulp_u;
+        }else{
+            parent[ulp_u]=ulp_v;
+            rank[ulp_v]++;
+        }
+    }
+}
+
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+        DisjointSet ds = new DisjointSet(n);
+        if(connections.length<n-1)
+            return -1;
+        int count=0;
+        for(int i=0;i<connections.length;i++){
+            if(ds.findParent(connections[i][0])!=ds.findParent(connections[i][1])){
+                ds.unionByRank(connections[i][0],connections[i][1]);
+            }else{
+            //counting extra edges that can be used for making connections.
+                count++;
+            }
+        }
+        int temp=0;
+        for(int i=0;i<n;i++){
+        //counting no. of ultimate parent
+            if(ds.findParent(i)==i)
+                temp++;
+        }
+        //ultimate parents can be connected by temp-1 edges, extra edges woould work
+        if(temp-1<=count)
+            return temp-1;
+        return -1;
+    }
+}
