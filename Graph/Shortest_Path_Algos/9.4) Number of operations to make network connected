@@ -52,6 +52,12 @@ class Solution {
             if(ds.findParent(i)==i)
                 temp++;
         }
+        
+        //for(int i=0;i<n;i++){
+        //  if(ds.parent[i]==i)
+        //    temp++;
+        //}
+        
         //ultimate parents can be connected by temp-1 edges, extra edges woould work
         if(temp-1<=count)
             return temp-1;
