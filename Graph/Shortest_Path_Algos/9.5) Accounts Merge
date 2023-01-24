@@ -1,0 +1,71 @@
+class DisjointSet{
+    int parent[];
+    int rank[];
+    DisjointSet(int n){
+        parent = new int[n];
+        rank = new int[n];
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+            rank[i]=1;
+        }
+    }
+
+    int findParent(int X){
+        if(X==parent[X])
+            return X;
+        return parent[X]=findParent(parent[X]);
+    }
+
+    void unionByRank(int u, int v){
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        if(ulp_u == ulp_v)
+            return;
+        else if(rank[ulp_u]<rank[ulp_v])
+            parent[ulp_u]=ulp_v;
+        else if(rank[ulp_u]>rank[ulp_v])
+            parent[ulp_v]=ulp_u;
+        else{
+            parent[ulp_u]=ulp_v;
+            rank[ulp_v]++;
+        }
+    }
+}
+class Solution {
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        int n = accounts.size();
+        DisjointSet ds = new DisjointSet(n);
+        HashMap<String, Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            for(int j=1;j<accounts.get(i).size();j++){
+                if(!map.containsKey(accounts.get(i).get(j))){
+                    map.put(accounts.get(i).get(j),i);
+                }else{
+                    ds.unionByRank(i,map.get(accounts.get(i).get(j)));
+                }
+            }
+        }
+
+        List<List<String>> mergedMails = new ArrayList<>();
+        for(int i=0;i<n;i++)
+            mergedMails.add(new ArrayList<>());
+
+        for(String key: map.keySet()){
+            String mail = key;
+            int u =  ds.findParent(map.get(key));
+            mergedMails.get(u).add(mail);
+        }
+        List<List<String>> ans = new ArrayList<>();
+        for(int i=0;i<mergedMails.size();i++){
+            if(mergedMails.get(i).size()==0)
+                continue;
+            Collections.sort(mergedMails.get(i));
+            List<String> temp = new ArrayList<>();
+            temp.add(accounts.get(i).get(0));
+            for(int j=0;j<mergedMails.get(i).size();j++)
+                temp.add(mergedMails.get(i).get(j));
+            ans.add(temp);
+        }
+        return ans;
+    }
+}
