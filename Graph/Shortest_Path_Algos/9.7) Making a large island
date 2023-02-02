@@ -1,0 +1,92 @@
+class DisjointSet{
+    int parent[];
+    int size[];
+    DisjointSet(int n){
+        parent = new int[n];
+        size = new int[n];
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+            size[i]=1;
+        }
+    }
+
+    int findParent(int X){
+        if(X == parent[X])
+            return X;
+        return parent[X]=findParent(parent[X]);
+    }
+
+    void unionBySize(int u, int v){
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        if(ulp_u == ulp_v)
+            return;
+        if(size[ulp_u]<size[ulp_v]){
+            parent[ulp_u]=ulp_v;
+            size[ulp_v]+=size[ulp_u];
+        }else if(size[ulp_u]>size[ulp_v]){
+            parent[ulp_v]=ulp_u;
+            size[ulp_u]+=size[ulp_v];
+        }else{
+            parent[ulp_u]=ulp_v;
+            size[ulp_v]+=size[ulp_u];
+        }
+    }
+}
+
+class Solution {
+    public int largestIsland(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        DisjointSet ds = new DisjointSet(m*n);
+        int visited[][] = new int[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1 && visited[i][j]==0){
+                    visited[i][j]=1;
+                    int dr[] = new int[]{0,-1,0,1};
+                    int dc[] = new int[]{-1,0,1,0};
+                    for(int index=0;index<4;index++){
+                        int adjr = i+dr[index];
+                        int adjc = j+dc[index];
+                        if(adjr>=0 && adjr<m && adjc>=0 && adjc<n){
+                            if(visited[adjr][adjc]==1){
+                                int nodeno = i*n+j;
+                                int adjnodeno = adjr*n+adjc;
+                                ds.unionBySize(nodeno,adjnodeno);
+                            }
+                        }
+                    }
+                }
+            }   
+        }
+        int max=1;
+        for(int i=0; i<m*n;i++)
+            max = Math.max(max, ds.size[i]);
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                Set<Integer> set = new HashSet<>();
+                if(grid[i][j]==0){
+                    int dr[] = new int[]{0,-1,0,1};
+                    int dc[] = new int[]{-1,0,1,0};
+                    for(int index=0;index<4;index++){
+                        int adjr = i+dr[index];
+                        int adjc = j+dc[index];
+                        if(adjr>=0 && adjr<m && adjc>=0 && adjc<n){
+                            if(grid[adjr][adjc]==1){
+                                int nodeno = i*n+j;
+                                int adjnodeno = adjr*n+adjc;
+                                set.add(ds.findParent(adjnodeno));
+                            }
+                        }
+                    }
+                }
+                int temp = 0;
+                for(Integer it : set)
+                    temp+= ds.size[it]; 
+                max= Math.max(max,temp+1);
+            }
+        }
+        return max;
+    }
+}
