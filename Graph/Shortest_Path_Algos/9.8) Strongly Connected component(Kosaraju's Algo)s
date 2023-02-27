@@ -1,0 +1,50 @@
+
+class Solution
+{
+    void dfs(int node, ArrayList<ArrayList<Integer>> adj, int visited[], int V, Stack<Integer>s){
+        visited[node]=1;
+        for(int i=0;i<adj.get(node).size();i++){
+            if(visited[adj.get(node).get(i)]==0)
+                dfs(adj.get(node).get(i),adj,visited,V,s);
+        }
+        s.push(node);
+    }
+    void dfs2(int node, ArrayList<ArrayList<Integer>> adj, int visited[]){
+        visited[node]=1;
+        for(int i=0;i<adj.get(node).size();i++){
+            if(visited[adj.get(node).get(i)]==0)
+                dfs2(adj.get(node).get(i),adj,visited);
+        }
+    }
+    
+    //Function to find number of strongly connected components in the graph.
+    public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        int visited[]=new int[V];
+        Stack<Integer> s = new Stack<>();
+        for(int i=0;i<V;i++){
+            if(visited[i]==0)
+                dfs(i,adj,visited,V,s);
+        }
+        ArrayList<ArrayList<Integer>> adjR = new ArrayList<>();
+        for(int i=0;i<V;i++)
+            adjR.add(new ArrayList<>());
+            
+        for(int i=0;i<V;i++){
+            visited[i]=0;
+            for(int j=0;j<adj.get(i).size();j++){
+                adjR.get(adj.get(i).get(j)).add(i);
+            }
+        }
+        int count=0;
+        while(!s.isEmpty()){
+            int node = s.peek();
+            s.pop();
+            if(visited[node]==0){
+                count++;
+                dfs2(node,adjR,visited);
+            }
+        }
+        return count;
+    }
+}
