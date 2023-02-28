@@ -1,0 +1,40 @@
+class Solution {
+    void dfs(int node, int parent, int in,List<List<Integer>> adj, int visited[], int inTime[], int lowTime[],List<List<Integer>> bridges){
+        visited[node]=1;
+        in++;
+        inTime[node]=in;
+        lowTime[node]=in;
+        for(Integer it: adj.get(node)){
+            if(it ==parent)
+                continue;
+            if(visited[it]==0){
+                dfs(it,node,in,adj,visited,inTime,lowTime,bridges);
+                lowTime[node]=Math.min(lowTime[node],lowTime[it]);
+                if(lowTime[it]>inTime[node])
+                    bridges.add(Arrays.asList(it,node));
+            }else
+                lowTime[node]=Math.min(lowTime[node],lowTime[it]);
+            
+        }
+    }
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i=0;i<n;i++)
+            adj.add(new ArrayList<>());
+
+        for(List<Integer> it: connections){
+            int u = it.get(0);
+            int v = it.get(1);
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        int visited[]= new int[n];
+        int inTime[]= new int[n];
+        int lowTime[]= new int[n];
+        int in=0;
+        List<List<Integer>> bridges = new ArrayList<>();
+        dfs(0,-1,in,adj,visited, inTime, lowTime, bridges);
+        return bridges;
+    }
+}
