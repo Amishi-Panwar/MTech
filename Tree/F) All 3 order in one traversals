@@ -1,0 +1,58 @@
+
+class Pair{
+    TreeNode node;
+    int count;
+    Pair(TreeNode node, int count){
+        this.node=node;
+        this.count = count;
+    }
+}
+class Solution {
+
+    void helper(TreeNode root, Stack<Pair> s1, ArrayList<Integer> pre, ArrayList<Integer> in, ArrayList<Integer> post){
+        
+        if(root !=null)
+            s1.add(new Pair(root,1));
+        else 
+            return;
+
+        while(!s1.isEmpty()){
+            Pair it = s1.pop();
+            if(it.count == 1){
+                pre.add(it.node.val);
+                it.count++;
+                s1.push(it);
+                if(it.node.left!=null)
+                    s1.add(new Pair(it.node.left,1));
+            }
+            elseif(it.count == 2){
+                in.add(it.node.val);
+                it.count++;
+                s1.push(it);
+                if(it.node.right!=null)
+                    s1.add(new Pair(it.node.right,1));
+            }else{
+                post.add(it.node.val);
+            }
+        }
+        for(int i=0;i<pre.size();i++)
+            System.out.print(pre.get(i));
+            System.out.println();
+        for(int i=0;i<in.size();i++)
+             System.out.print(in.get(i));
+              System.out.println();
+
+        for(int i=0;i<post.size();i++)
+              System.out.print(post.get(i));
+        
+    }
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> answer = new ArrayList<>();
+        Stack<Pair> s1 = new Stack<>();
+        ArrayList<Integer> pre = new ArrayList<>();
+        ArrayList<Integer> in = new ArrayList<>();
+        ArrayList<Integer> post = new ArrayList<>();
+        helper(root,s1,pre,in,post);
+        return answer;
+    }
+}
