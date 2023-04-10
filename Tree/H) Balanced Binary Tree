@@ -36,3 +36,16 @@ class Solution {
     
     }
 }
+____________________________________________________________________________________________________________________________________
+public int maxDepth(TreeNode root) {
+    // Add below line to come out of recursion quickly as soon as imbalance is found 
+    if (!result) return 0;
+    if (root == null)
+        return 0;
+    int l = maxDepth(root.left);
+    int r = maxDepth(root.right);
+    if (Math.abs(l - r) > 1)
+        result = false;
+    return 1 + Math.max(l, r);
+}
+}
